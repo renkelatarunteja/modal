@@ -16,28 +16,31 @@ function App() {
   };
 
   const handleSubmit = () => {
+    let errorMessage = '';
+  
     if (!formData.username || !formData.email || !formData.phone || !formData.dob) {
-      alert('Please fill in all fields\nInvalid email. Please check your email address.');
-      return;
+      errorMessage += 'Please fill in all fields\nInvalid email. Please check your email address.';
     }
-
+  
     if (!formData.email.includes('@')) {
-      alert('Invalid email. Please check your email address.');
-      return;
+      errorMessage += '\nInvalid email. Please check your email address.';
     }
-
+  
     if (formData.phone.length !== 10) {
-      alert('Invalid phone number. Please enter a 10-digit phone number.');
-      return;
+      errorMessage += '\nInvalid phone number. Please enter a 10-digit phone number.';
     }
-
+  
     const currentDate = new Date();
     const dobDate = new Date(formData.dob);
     if (dobDate > currentDate) {
-      alert('Invalid date of birth.');
+      errorMessage += '\nInvalid date of birth.';
+    }
+  
+    if (errorMessage) {
+      alert(errorMessage);
       return;
     }
-
+  
     // Submit logic goes here
     // For this example, let's just reset the form data and close the modal
     setFormData({
@@ -48,6 +51,7 @@ function App() {
     });
     setIsOpen(false);
   };
+  
 
   const handleCloseModal = () => {
     setIsOpen(false);
