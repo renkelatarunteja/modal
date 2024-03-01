@@ -17,7 +17,7 @@ function App() {
 
   const handleSubmit = () => {
     if (!formData.username || !formData.email || !formData.phone || !formData.dob) {
-      alert('Please fill in all fields');
+      alert('Please fill in all fields\nInvalid email. Please check your email address.');
       return;
     }
 
