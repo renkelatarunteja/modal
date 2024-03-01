@@ -1,98 +1,97 @@
 import React, { useState } from 'react';
-import './styles.css'; // Assuming you have a CSS file for styling
+import './App.css';
 
-function XModal() {
+function App() {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
     email: '',
+    phone: '',
     dob: '',
-    phone: ''
-  });
-  const [formErrors, setFormErrors] = useState({
-    username: false,
-    email: false,
-    dob: false,
-    phone: false
   });
 
-  const handleChange = (e) => {
+  const handleInputChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
-    // Reset the error message when the user starts typing
-    setFormErrors({ ...formErrors, [id]: false });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const newFormErrors = {};
-    let hasErrors = false;
-
-    // Check for empty fields
-    Object.keys(formData).forEach((key) => {
-      if (!formData[key]) {
-        newFormErrors[key] = true;
-        hasErrors = true;
-      }
-    });
-
-    if (hasErrors) {
-      setFormErrors(newFormErrors);
-      alert("Please fill in all fields.");
+  const handleSubmit = () => {
+    if (!formData.username || !formData.email || !formData.phone || !formData.dob) {
+      alert('Please fill in all fields');
       return;
     }
 
     if (!formData.email.includes('@')) {
-      alert("Invalid email. Please check your email address.");
+      alert('Invalid email. Please check your email address.');
       return;
     }
 
-    if (formData.phone.length !== 10 || isNaN(formData.phone)) {
-      alert("Invalid phone number. Please enter a 10-digit phone number.");
+    if (formData.phone.length !== 10) {
+      alert('Invalid phone number. Please enter a 10-digit phone number.');
       return;
     }
 
-    const today = new Date();
-    const dob = new Date(formData.dob);
-    if (dob > today) {
-      alert("Invalid date of birth. Please enter a valid date.");
+    const currentDate = new Date();
+    const dobDate = new Date(formData.dob);
+    if (dobDate > currentDate) {
+      alert('Invalid date of birth.');
       return;
     }
 
-    // If all validations pass, you can handle form submission here
-    // For simplicity, just resetting the form data
+    // Submit logic goes here
+    // For this example, let's just reset the form data and close the modal
     setFormData({
       username: '',
       email: '',
+      phone: '',
       dob: '',
-      phone: ''
     });
+    setIsOpen(false);
+  };
 
-    // Closing the modal after successful submission
+  const handleCloseModal = () => {
     setIsOpen(false);
   };
 
   return (
-    <div className="app">
+    <div className="App">
       <button onClick={() => setIsOpen(true)}>Open Form</button>
       {isOpen && (
-        <div className="modal" onClick={() => setIsOpen(false)}>
+        <div className="modal" onClick={handleCloseModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>File Details</h2>
-            <form onSubmit={handleSubmit}>
-              <label htmlFor="username">Username:</label>
-              <input type="text" id="username" value={formData.username} onChange={handleChange} />
-              {formErrors.username && <span className="error-message">Please fill out this field</span>}
-              <label htmlFor="email">Email:</label>
-              <input type="text" id="email" value={formData.email} onChange={handleChange} />
-              {formErrors.email && <span className="error-message">Please fill out this field</span>}
-              <label htmlFor="dob">Date of Birth:</label>
-              <input type="date" id="dob" value={formData.dob} onChange={handleChange} />
-              {formErrors.dob && <span className="error-message">Please fill out this field</span>}
-              <label htmlFor="phone">Phone:</label>
-              <input type="text" id="phone" value={formData.phone} onChange={handleChange} />
-              {formErrors.phone && <span className="error-message">Please fill out this field</span>}
-              <button type="submit" className="submit-button">Submit</button>
+            <h2>Modal Form</h2>
+            <form>
+              <input
+                type="text"
+                id="username"
+                value={formData.username}
+                onChange={handleInputChange}
+                placeholder="Username"
+              />
+              <input
+                type="email"
+                id="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="Email"
+              />
+              <input
+                type="tel"
+                id="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                placeholder="Phone"
+              />
+              <input
+                type="date"
+                id="dob"
+                value={formData.dob}
+                onChange={handleInputChange}
+                placeholder="Date of Birth"
+              />
+              <button type="button" className="submit-button" onClick={handleSubmit}>
+                Submit
+              </button>
             </form>
           </div>
         </div>
@@ -101,5 +100,4 @@ function XModal() {
   );
 }
 
-export default XModal;
-
+export default App;
